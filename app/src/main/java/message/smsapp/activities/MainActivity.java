@@ -1,4 +1,4 @@
-package message.smsapp;
+package message.smsapp.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import message.smsapp.R;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -41,31 +43,30 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         TextView title = findViewById(R.id.textView);
-        title.setText("Messages");
+        title.setText(getString(R.string.message_title));
 
         ListView mainlist = findViewById(R.id.list_Messages);
 
-        String[][] listOfComponents = {
-                {"", "test"},
-                {"", "test2"}
-        };
+        ArrayList<String[]> listOfComponents = new ArrayList<>();
+        listOfComponents.add(new String[]{"Expéditeur1", "Description"});
+        listOfComponents.add(new String[]{"Expéditeur2", "Description"});
 
         List<HashMap<String, String>> list = new ArrayList<>();
 
         HashMap<String, String> element;
 
-        for (int i = 0; i < listOfComponents.length; i++) {
+        for (int i = 0; i < listOfComponents.size(); i++) {
             element = new HashMap<>();
 
-            element.put("title", listOfComponents[i][0]);
+            element.put("title", listOfComponents.get(i)[0]);
 
-            element.put("component", listOfComponents[i][1]);
+            element.put("component", listOfComponents.get(i)[1]);
 
             list.add(element);
         }
 
         ListAdapter adapter = new SimpleAdapter(
-                this, list, android.R.layout.simple_list_item_2, new String[]{"title", "component"}, new int[]{android.R.id.text1, android.R.id.text2}
+                this, list, R.layout.personalized_list, new String[]{"title", "component"}, new int[]{android.R.id.text1, android.R.id.text2}
         );
         mainlist.setAdapter(adapter);
 
@@ -105,7 +106,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
