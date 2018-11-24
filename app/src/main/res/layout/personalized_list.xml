@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
 
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="45dp"
+    <ImageView
+        android:contentDescription="@string/icon"
+        android:id="@+id/iconChat"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/ic_menu_send" >
+    </ImageView>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_menu_send"/>
+        android:orientation="vertical">
 
-    <include layout="@android:layout/simple_list_item_2"></include>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/message"
+            android:textSize="24sp"></TextView>
 
-</android.support.v7.widget.LinearLayoutCompat>
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/content_message"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:textStyle="italic"></TextView>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+</LinearLayout>

@@ -7,4 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="message_title">Messages</string>
+    <string name="icon">icon</string>
+    <string name="message">Message</string>
+    <string name="content_message">Content</string>
 </resources>

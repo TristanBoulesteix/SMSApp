@@ -1,9 +1,6 @@
 package message.smsapp.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,14 +12,12 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import message.smsapp.R;
+import message.smsapp.layouts_manager.MessagesAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,27 +42,16 @@ public class MainActivity extends AppCompatActivity
 
         ListView mainlist = findViewById(R.id.list_Messages);
 
-        ArrayList<String[]> listOfComponents = new ArrayList<>();
-        listOfComponents.add(new String[]{"Expéditeur1", "Description"});
-        listOfComponents.add(new String[]{"Expéditeur2", "Description"});
+        ArrayList<String> listOfComponents = new ArrayList<>();
+        listOfComponents.add("Expéditeur 1");
+        listOfComponents.add("Expéditeur 2");
 
-        List<HashMap<String, String>> list = new ArrayList<>();
+        ArrayList<Integer> listOfIcons = new ArrayList<>();
+        listOfIcons.add(R.drawable.ic_menu_send);
+        listOfIcons.add(R.drawable.ic_menu_share);
 
-        HashMap<String, String> element;
 
-        for (int i = 0; i < listOfComponents.size(); i++) {
-            element = new HashMap<>();
-
-            element.put("title", listOfComponents.get(i)[0]);
-
-            element.put("component", listOfComponents.get(i)[1]);
-
-            list.add(element);
-        }
-
-        ListAdapter adapter = new SimpleAdapter(
-                this, list, R.layout.personalized_list, new String[]{"title", "component"}, new int[]{android.R.id.text1, android.R.id.text2}
-        );
+        ListAdapter adapter = new MessagesAdapter(this, listOfComponents, listOfIcons);
         mainlist.setAdapter(adapter);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
