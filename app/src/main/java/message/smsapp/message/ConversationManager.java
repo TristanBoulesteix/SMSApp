@@ -27,14 +27,8 @@ public class ConversationManager {
 		
 		this.smsList.clear();
 		
-		listOfComponents.add("Expéditeur 1");
-		listOfComponents.add("Expéditeur 2");
-		
-		listOfContents.add("test1");
-		listOfContents.add("test2");
-		
-		listOfIcons.add(R.drawable.ic_menu_send);
-		listOfIcons.add(R.drawable.ic_menu_share);
+		this.addConversation("Expéditeur 1", "test 1", R.drawable.ic_menu_send);
+		this.addConversation("Expéditeur 2", "test 2", R.drawable.ic_menu_share);
 		
 		ListAdapter adapter = new MessagesAdapter(context, listOfComponents, listOfContents, listOfIcons);
 		list.setAdapter(adapter);
