@@ -10,17 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import message.smsapp.R;
-import message.smsapp.layouts_manager.MessagesAdapter;
+import message.smsapp.message.ConversationManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private ConversationManager conversations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +40,7 @@ public class MainActivity extends AppCompatActivity
 
         ListView mainlist = findViewById(R.id.list_Messages);
 
-        ArrayList<String> listOfComponents = new ArrayList<>();
-        listOfComponents.add("Expéditeur 1");
-        listOfComponents.add("Expéditeur 2");
-
-        ArrayList<Integer> listOfIcons = new ArrayList<>();
-        listOfIcons.add(R.drawable.ic_menu_send);
-        listOfIcons.add(R.drawable.ic_menu_share);
-
-
-        ListAdapter adapter = new MessagesAdapter(this, listOfComponents, listOfIcons);
-        mainlist.setAdapter(adapter);
+        this.conversations = ConversationManager.getInstance(this, mainlist);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
