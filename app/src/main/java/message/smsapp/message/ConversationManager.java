@@ -2,7 +2,6 @@ package message.smsapp.message;
 
 import android.Manifest;
 import android.app.Activity;
-import android.arch.core.util.Function;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -11,14 +10,10 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.CursorLoader;
-import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import message.smsapp.R;
 import message.smsapp.layouts_manager.MessagesAdapter;
@@ -31,6 +26,7 @@ public class ConversationManager {
 	private ArrayList<String> listOfComponents, listOfContents;
 	private ArrayList<Integer> listOfIcons;
 	private ArrayList<String> smsList;
+	private ContactManager contactManager;
 	
 	private ConversationManager(Context context, ListView list, int REQUEST_PERMISSION_KEY) {
 		this.context = context;
@@ -38,6 +34,7 @@ public class ConversationManager {
 		this.listOfContents = new ArrayList<>();
 		this.listOfIcons = new ArrayList<>();
 		this.smsList = new ArrayList<>();
+		this.contactManager = ContactManager.getInstance(context, REQUEST_PERMISSION_KEY);
 		
 		if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) !=
 				PackageManager.PERMISSION_GRANTED) {
@@ -57,7 +54,8 @@ public class ConversationManager {
 		list.setAdapter(adapter);
 	}
 	
-	public static ConversationManager getInstance(Context context, ListView list, int REQUEST_PERMISSION_KEY) {
+	public static ConversationManager getInstance(Context context, ListView list,
+	                                              int REQUEST_PERMISSION_KEY) {
 		if (ConversationManager.instance == null) {
 			return ConversationManager.instance = new ConversationManager(context, list, REQUEST_PERMISSION_KEY);
 		} else {
@@ -65,7 +63,7 @@ public class ConversationManager {
 		}
 	}
 	
-	private void refreshSMS(){
+	private void refreshSMS() {
 		this.clearDatas();
 		
 		ContentResolver contentResolver = context.getContentResolver();
@@ -81,10 +79,12 @@ public class ConversationManager {
 			this.addConversation(cursor.getString(indexAddress), getPreviewBody(cursor.getString(indexBody)), R.drawable
 					.ic_menu_send);
 		} while (cursor.moveToNext());
+		
+		cursor.close();
 	}
 	
 	@NonNull
-	private String getPreviewBody(String body){
+	private String getPreviewBody(String body) {
 		String preview = body.substring(0, Math.min(body.length(), 35));
 		preview += (body.length() > preview.length()) ? "..." : "";
 		
@@ -97,7 +97,7 @@ public class ConversationManager {
 		this.listOfIcons.add(id);
 	}
 	
-	private void clearDatas(){
+	private void clearDatas() {
 		this.listOfComponents.clear();
 		this.listOfContents.clear();
 		this.listOfIcons.clear();
