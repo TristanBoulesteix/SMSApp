@@ -1,5 +1,6 @@
 package message.smsapp.activities;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +19,8 @@ import message.smsapp.message.ConversationManager;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
+	private static final int REQUEST_PERMISSION_KEY = 1;
+	
 	private ConversationManager conversations;
 	
 	@Override
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 		
 		ListView mainlist = findViewById(R.id.list_Messages);
 		
-		this.conversations = ConversationManager.getInstance(this, mainlist);
+		this.conversations = ConversationManager.getInstance(this, mainlist, REQUEST_PERMISSION_KEY);
 		
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
@@ -100,5 +103,27 @@ public class MainActivity extends AppCompatActivity
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+	                                       String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case REQUEST_PERMISSION_KEY: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					// permission was granted, yay! Do the
+					// contacts-related task you need to do.
+				} else {
+					// permission denied, boo! Disable the
+					// functionality that depends on this permission.
+				}
+				return;
+			}
+			
+			// other 'case' lines to check for other
+			// permissions this app might request.
+		}
 	}
 }
