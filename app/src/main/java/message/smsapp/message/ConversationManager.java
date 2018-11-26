@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -48,8 +49,6 @@ public class ConversationManager {
 						new String[]{Manifest.permission.READ_SMS},
 						REQUEST_PERMISSION_KEY);
 			}
-		} else {
-		
 		}
 		
 		this.refreshSMS();
@@ -67,6 +66,8 @@ public class ConversationManager {
 	}
 	
 	private void refreshSMS(){
+		this.clearDatas();
+		
 		ContentResolver contentResolver = context.getContentResolver();
 		final String[] projection = new String[]{"*"};
 		Uri uri = Uri.parse("content://mms-sms/conversations/");
@@ -77,14 +78,28 @@ public class ConversationManager {
 		if (indexBody < 0 || !cursor.moveToFirst()) return;
 		
 		do {
-			this.addConversation(cursor.getString(indexAddress), "content", R.drawable
+			this.addConversation(cursor.getString(indexAddress), getPreviewBody(cursor.getString(indexBody)), R.drawable
 					.ic_menu_send);
 		} while (cursor.moveToNext());
+	}
+	
+	@NonNull
+	private String getPreviewBody(String body){
+		String preview = body.substring(0, Math.min(body.length(), 35));
+		preview += (body.length() > preview.length()) ? "..." : "";
+		
+		return preview;
 	}
 	
 	private void addConversation(String title, String content, int id) {
 		this.listOfComponents.add(title);
 		this.listOfContents.add(content);
 		this.listOfIcons.add(id);
+	}
+	
+	private void clearDatas(){
+		this.listOfComponents.clear();
+		this.listOfContents.clear();
+		this.listOfIcons.clear();
 	}
 }
