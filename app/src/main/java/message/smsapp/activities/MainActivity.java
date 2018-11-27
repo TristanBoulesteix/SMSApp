@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 		
 		ListView mainlist = findViewById(R.id.list_Messages);
 		
-		this.conversations = ConversationManager.getInstance(this, mainlist, REQUEST_PERMISSION_KEY);
+		this.conversations = new ConversationManager(this, mainlist, REQUEST_PERMISSION_KEY);
 		
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);

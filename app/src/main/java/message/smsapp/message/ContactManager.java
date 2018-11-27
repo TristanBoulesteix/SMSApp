@@ -15,15 +15,13 @@ import java.util.ArrayList;
 
 import message.smsapp.activities.MainActivity;
 
-class ContactManager {
-	private static ContactManager instance;
-	
+public class ContactManager {
 	private Context context;
 	private ArrayList<Integer> ids;
 	private ArrayList<String> names;
 	private ArrayList<String> phoneNumbers;
 	
-	private ContactManager(Context context, int REQUEST_PERMISSION_KEY) {
+	public ContactManager(Context context, int REQUEST_PERMISSION_KEY) {
 		this.context = context;
 		this.ids = new ArrayList<>();
 		this.names = new ArrayList<>();
@@ -42,14 +40,6 @@ class ContactManager {
 		}
 		
 		this.getContactList();
-	}
-	
-	public static ContactManager getInstance(Context context, int REQUEST_PERMISSION_KEY) {
-		if (ContactManager.instance == null) {
-			return ContactManager.instance = new ContactManager(context, REQUEST_PERMISSION_KEY);
-		} else {
-			return ContactManager.instance;
-		}
 	}
 	
 	private void getContactList() {

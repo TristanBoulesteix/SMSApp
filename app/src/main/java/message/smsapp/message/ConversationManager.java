@@ -19,8 +19,6 @@ import message.smsapp.R;
 import message.smsapp.layouts_manager.MessagesAdapter;
 
 public class ConversationManager {
-	private static ConversationManager instance;
-	
 	private final Context context;
 	
 	private ArrayList<String> listOfComponents, listOfContents;
@@ -28,13 +26,13 @@ public class ConversationManager {
 	private ArrayList<String> smsList;
 	private ContactManager contactManager;
 	
-	private ConversationManager(Context context, ListView list, int REQUEST_PERMISSION_KEY) {
+	public ConversationManager(Context context, ListView list, int REQUEST_PERMISSION_KEY) {
 		this.context = context;
 		this.listOfComponents = new ArrayList<>();
 		this.listOfContents = new ArrayList<>();
 		this.listOfIcons = new ArrayList<>();
 		this.smsList = new ArrayList<>();
-		this.contactManager = ContactManager.getInstance(context, REQUEST_PERMISSION_KEY);
+		this.contactManager = new ContactManager(context, REQUEST_PERMISSION_KEY);
 		
 		if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) !=
 				PackageManager.PERMISSION_GRANTED) {
@@ -52,15 +50,6 @@ public class ConversationManager {
 		
 		ListAdapter adapter = new MessagesAdapter(context, listOfComponents, listOfContents, listOfIcons);
 		list.setAdapter(adapter);
-	}
-	
-	public static ConversationManager getInstance(Context context, ListView list,
-	                                              int REQUEST_PERMISSION_KEY) {
-		if (ConversationManager.instance == null) {
-			return ConversationManager.instance = new ConversationManager(context, list, REQUEST_PERMISSION_KEY);
-		} else {
-			return ConversationManager.instance;
-		}
 	}
 	
 	private void refreshSMS() {
