@@ -2,16 +2,20 @@ package message.smsapp.message;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.util.ArrayList;
 
-public class ContactManager {
+import message.smsapp.activities.MainActivity;
+
+class ContactManager {
 	private static ContactManager instance;
 	
 	private Context context;
@@ -49,18 +53,37 @@ public class ContactManager {
 	}
 	
 	private void getContactList() {
-		Cursor contactCursor = this.context.getContentResolver().query(ContactsContract.Contacts
-						.CONTENT_URI,
-				new String[]{ContactsContract.CommonDataKinds.Phone._ID, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null,
-				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+		ContentResolver resolver = this.context.getContentResolver();
+		Cursor cur = resolver.query(ContactsContract.Contacts.CONTENT_URI,
+				null, null, null, null);
 		
-		do {
-			this.addContact(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
-					._ID), Integer.toString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone
-					.DISPLAY_NAME)), Integer.toString(contactCursor.getColumnIndex(ContactsContract
-					.CommonDataKinds.Phone
-					.NUMBER)));
-		} while (contactCursor.moveToNext());
+		if ((cur != null ? cur.getCount() : 0) > 0) {
+			while (cur != null && cur.moveToNext()) {
+				String id = cur.getString(
+						cur.getColumnIndex(ContactsContract.Contacts._ID));
+				String name = cur.getString(cur.getColumnIndex(
+						ContactsContract.Contacts.DISPLAY_NAME));
+				
+				if (cur.getInt(cur.getColumnIndex(
+						ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+					Cursor pCur = resolver.query(
+							ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+							null,
+							ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+							new String[]{id}, null);
+					while (pCur.moveToNext()) {
+						String phoneNo = pCur.getString(pCur.getColumnIndex(
+								ContactsContract.CommonDataKinds.Phone.NUMBER));
+						Log.i(MainActivity.class.getSimpleName(), "Name: " + name);
+						Log.i(MainActivity.class.getSimpleName(), "Phone Number: " + phoneNo);
+					}
+					pCur.close();
+				}
+			}
+		}
+		if(cur!=null){
+			cur.close();
+		}
 	}
 	
 	private void addContact(int id, String name, String phoneNumber) {
