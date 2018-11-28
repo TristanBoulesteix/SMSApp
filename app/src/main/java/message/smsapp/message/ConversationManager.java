@@ -65,7 +65,9 @@ public class ConversationManager {
 		if (indexBody < 0 || !cursor.moveToFirst()) return;
 		
 		do {
-			this.addConversation(cursor.getString(indexAddress), getPreviewBody(cursor.getString(indexBody)), R.drawable
+			this.addConversation(this.contactManager.getContactNameWithNumber(cursor.getString
+					(indexAddress)), getPreviewBody(cursor.getString(indexBody)), R
+					.drawable
 					.ic_menu_send);
 		} while (cursor.moveToNext());
 		

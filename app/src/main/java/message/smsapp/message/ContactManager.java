@@ -9,11 +9,8 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import java.util.ArrayList;
-
-import message.smsapp.activities.MainActivity;
 
 public class ContactManager {
 	private Context context;
@@ -44,35 +41,35 @@ public class ContactManager {
 	
 	private void getContactList() {
 		ContentResolver resolver = this.context.getContentResolver();
-		Cursor cur = resolver.query(ContactsContract.Contacts.CONTENT_URI,
+		Cursor cursor = resolver.query(ContactsContract.Contacts.CONTENT_URI,
 				null, null, null, null);
 		
-		if ((cur != null ? cur.getCount() : 0) > 0) {
-			while (cur != null && cur.moveToNext()) {
-				String id = cur.getString(
-						cur.getColumnIndex(ContactsContract.Contacts._ID));
-				String name = cur.getString(cur.getColumnIndex(
+		if ((cursor != null ? cursor.getCount() : 0) > 0) {
+			while (cursor != null && cursor.moveToNext()) {
+				String id = cursor.getString(
+						cursor.getColumnIndex(ContactsContract.Contacts._ID));
+				String name = cursor.getString(cursor.getColumnIndex(
 						ContactsContract.Contacts.DISPLAY_NAME));
 				
-				if (cur.getInt(cur.getColumnIndex(
+				if (cursor.getInt(cursor.getColumnIndex(
 						ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-					Cursor pCur = resolver.query(
+					Cursor cursorContact = resolver.query(
 							ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
 							null,
 							ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
 							new String[]{id}, null);
-					while (pCur.moveToNext()) {
-						String phoneNo = pCur.getString(pCur.getColumnIndex(
+					while (cursorContact.moveToNext()) {
+						String phoneNumber = cursorContact.getString(cursorContact.getColumnIndex(
 								ContactsContract.CommonDataKinds.Phone.NUMBER));
-						Log.i(MainActivity.class.getSimpleName(), "Name: " + name);
-						Log.i(MainActivity.class.getSimpleName(), "Phone Number: " + phoneNo);
+						
+						this.addContact(Integer.parseInt(id), name, phoneNumber);
 					}
-					pCur.close();
+					cursorContact.close();
 				}
 			}
 		}
-		if(cur!=null){
-			cur.close();
+		if (cursor != null) {
+			cursor.close();
 		}
 	}
 	
@@ -80,5 +77,13 @@ public class ContactManager {
 		this.ids.add(id);
 		this.names.add(name);
 		this.phoneNumbers.add(phoneNumber);
+	}
+	
+	public String getContactNameWithNumber(String phoneNumber){
+		if (this.phoneNumbers.contains(phoneNumber)) {
+			return this.names.get(this.phoneNumbers.indexOf(phoneNumber));
+		} else {
+			return phoneNumber;
+		}
 	}
 }
