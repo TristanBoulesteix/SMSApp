@@ -79,7 +79,7 @@ public class ContactManager {
 		this.phoneNumbers.add(phoneNumber);
 	}
 	
-	public String getContactNameWithNumber(String phoneNumber){
+	public String getContactNameWithNumber(String phoneNumber) {
 		if (this.phoneNumbers.contains(phoneNumber)) {
 			return this.names.get(this.phoneNumbers.indexOf(phoneNumber));
 		} else {

@@ -23,15 +23,14 @@ public class ConversationManager {
 	
 	private ArrayList<String> listOfComponents, listOfContents;
 	private ArrayList<Integer> listOfIcons;
-	private ArrayList<String> smsList;
 	private ContactManager contactManager;
+	private ArrayList<Conversation> conversations;
 	
 	public ConversationManager(Context context, ListView list, int REQUEST_PERMISSION_KEY) {
 		this.context = context;
 		this.listOfComponents = new ArrayList<>();
 		this.listOfContents = new ArrayList<>();
 		this.listOfIcons = new ArrayList<>();
-		this.smsList = new ArrayList<>();
 		this.contactManager = new ContactManager(context, REQUEST_PERMISSION_KEY);
 		
 		if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) !=
@@ -55,9 +54,9 @@ public class ConversationManager {
 	private void refreshSMS() {
 		this.clearDatas();
 		
-		ContentResolver contentResolver = context.getContentResolver();
+		ContentResolver contentResolver = this.context.getContentResolver();
 		final String[] projection = new String[]{"*"};
-		Uri uri = Uri.parse("content://mms-sms/conversations/");
+		Uri uri = Uri.parse("content://sms/");
 		Cursor cursor = contentResolver.query(uri, projection, null, null, null);
 		
 		int indexBody = cursor.getColumnIndex("body");
@@ -72,6 +71,8 @@ public class ConversationManager {
 		} while (cursor.moveToNext());
 		
 		cursor.close();
+		
+		this.conversations = Conversation.generateConversation(listOfComponents, listOfContents);
 	}
 	
 	@NonNull
