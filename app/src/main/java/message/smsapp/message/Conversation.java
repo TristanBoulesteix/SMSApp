@@ -31,7 +31,7 @@ public class Conversation {
 		listOfConversations.add(new Conversation(currentNumber, messages));
 		
 		// Add other conversations
-		while (currentNumber != null) {
+		while (currentNumber.equals("")) {
 			currentNumber = Conversation.selectANewConversation(listOfConversations, adress);
 			
 			for (int i = 0; i < smsContent.size(); i++) {
@@ -42,8 +42,6 @@ public class Conversation {
 			
 			listOfConversations.add(new Conversation(currentNumber, messages));
 		}
-		
-		
 		
 		return listOfConversations;
 	}
@@ -56,7 +54,7 @@ public class Conversation {
 			}
 		}
 		
-		return null;
+		return "";
 	}
 	
 	public String getPhoneNumber() {
