@@ -1,6 +1,10 @@
 package message.smsapp.message;
 
+import android.util.Log;
+
 import java.util.ArrayList;
+
+import message.smsapp.activities.MainActivity;
 
 public class Conversation {
 	private String phoneNumber;
@@ -31,7 +35,7 @@ public class Conversation {
 		listOfConversations.add(new Conversation(currentNumber, messages));
 		
 		// Add other conversations
-		while (currentNumber.equals("")) {
+		while (!currentNumber.equals("")) {
 			currentNumber = Conversation.selectANewConversation(listOfConversations, adress);
 			
 			for (int i = 0; i < smsContent.size(); i++) {
@@ -48,8 +52,14 @@ public class Conversation {
 	
 	private static String selectANewConversation(ArrayList<Conversation> list, ArrayList<String>
 			adress) {
+		ArrayList<String> phoneUsed = new ArrayList<>();
+		
+		for (int i = 0; i < list.size(); i++) {
+			phoneUsed.add(list.get(i).getPhoneNumber());
+		}
+		
 		for (int i = 0; i < adress.size(); i++) {
-			if (!list.contains(adress.get(i))) {
+			if (!phoneUsed.contains(adress.get(i))) {
 				return adress.get(i);
 			}
 		}

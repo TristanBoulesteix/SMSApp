@@ -31,6 +31,7 @@ public class ConversationManager {
 		this.listOfComponents = new ArrayList<>();
 		this.listOfContents = new ArrayList<>();
 		this.listOfIcons = new ArrayList<>();
+		this.conversations = new ArrayList<>();
 		this.contactManager = new ContactManager(context, REQUEST_PERMISSION_KEY);
 		
 		if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) !=
@@ -47,7 +48,8 @@ public class ConversationManager {
 		
 		this.refreshSMS();
 		
-		ListAdapter adapter = new MessagesAdapter(context, listOfComponents, listOfContents, listOfIcons);
+		ListAdapter adapter = new MessagesAdapter(this.context, listOfComponents, listOfContents,
+				listOfIcons);
 		list.setAdapter(adapter);
 	}
 	
@@ -73,6 +75,28 @@ public class ConversationManager {
 		cursor.close();
 		
 		this.conversations = Conversation.generateConversation(listOfComponents, listOfContents);
+		
+		this.generateListWithConversations();
+	}
+	
+	private void generateListWithConversations(){
+		ArrayList<String> temp = new ArrayList<>();
+		
+		for (int i = 0; i < this.conversations.size(); i++) {
+			temp.add(this.conversations.get(i).getPhoneNumber());
+		}
+		
+		this.listOfComponents = temp;
+		
+		temp = new ArrayList<>();
+		
+		for (int i = 0; i < this.conversations.size(); i++) {
+			temp.add(this.conversations.get(i).getMessages().get(0));
+		}
+		
+		this.listOfContents = temp;
+		
+		this.addConversation(Integer.toString(this.conversations.size()), "test", R.drawable.ic_menu_camera);
 	}
 	
 	@NonNull
@@ -93,5 +117,6 @@ public class ConversationManager {
 		this.listOfComponents.clear();
 		this.listOfContents.clear();
 		this.listOfIcons.clear();
+		this.conversations.clear();
 	}
 }
